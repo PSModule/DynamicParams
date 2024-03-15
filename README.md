@@ -1,17 +1,18 @@
-# PSModuleTemplate
+# DynamicParams
 
-Add a short description about the module and the project.
+A PowerShell module that makes it easier to use dynamic params.
 
 ## Prerequisites
 
-List any prerequisites needed to use the module, such as PowerShell versions, additional modules, or permissions.
+No prerequisites are required to use this module.
 
 ## Installation
 
 Provide step-by-step instructions on how to install the module, including any InstallModule commands or manual installation steps.
 
 ```powershell
-Install-Module -Name YourModuleName
+Install-Module -Name DynamicParams
+Import-Module -Name DynamicParams
 ```
 
 ## Usage
@@ -19,33 +20,43 @@ Install-Module -Name YourModuleName
 Here is a list of example that are typical use cases for the module.
 This section should provide a good overview of the module's capabilities.
 
-### Example 1
+### Use dynamic parameters in a function
 
-Provide examples for typical commands that a user would like to do with the module.
-
-```powershell
-Import-Module -Name PSModuleTemplate
-```
-
-### Example 2
-
-Provide examples for typical commands that a user would like to do with the module.
+Here is an example of how to use dynamic parameters in a function.
 
 ```powershell
-Import-Module -Name PSModuleTemplate
+#REQUIRES -Modules DynamicParams
+
+function Get-Info {
+    [CmdletBinding()]
+    param ()
+
+    DynamicParam {
+        $DynamicParamDictionary = New-DynamicParamDictionary
+
+        $dynParam = @{
+            Name                   = 'Process'
+            Alias                  = 'proc'
+            Type                   = [string]
+            ValidateSet            = Get-Process | Select-Object -ExpandProperty Name -Unique
+            DynamicParamDictionary = $DynamicParamDictionary
+        }
+        New-DynamicParam @dynParam
+
+        $dynParam2 = @{
+            Name                   = 'Service'
+            Alias                  = 'svc'
+            Type                   = [string]
+            ValidateSet            = Get-Service | Select-Object -ExpandProperty Name -Unique
+            DynamicParamDictionary = $DynamicParamDictionary
+        }
+        New-DynamicParam @dynParam2
+
+        return $DynamicParamDictionary
+    }
+}
+
 ```
-
-### Find more examples
-
-To find more examples of how to use the module, please refer to the [examples](examples) folder.
-
-Alternatively, you can use the Get-Command -Module 'This module' to find more commands that are available in the module.
-To find examples of each of the commands you can use Get-Help -Examples 'CommandName'.
-
-## Documentation
-
-Link to further documentation if available, or describe where in the repository users can find more detailed documentation about
-the module's functions and features.
 
 ## Contributing
 
@@ -62,6 +73,6 @@ Please see the issues tab on this project and submit a new issue that matches yo
 If you do code, we'd love to have your contributions. Please read the [Contribution guidelines](CONTRIBUTING.md) for more information.
 You can either help by picking up an existing issue or submit a new one if you have an idea for a new feature or improvement.
 
-## Acknowledgements
+## Links
 
-Here is a list of people and projects that helped this project in some way.
+- [about_Functions_Advanced_Parameters | Microsoft Learn](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced_parameters?view=powershell-7.4#dynamic-parameters)
