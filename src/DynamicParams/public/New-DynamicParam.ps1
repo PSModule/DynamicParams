@@ -9,7 +9,6 @@
         .EXAMPLE
         DynamicParam {
             $DynamicParamDictionary = New-DynamicParamDictionary
-
             $dynParam = @{
                 Name                   = 'GitignoreTemplate'
                 Alias                  = 'gitignore_template'
@@ -18,7 +17,6 @@
                 DynamicParamDictionary = $DynamicParamDictionary
             }
             New-DynamicParam @dynParam
-
             $dynParam2 = @{
                 Name                   = 'LicenseTemplate'
                 Alias                  = 'license_template'
@@ -27,16 +25,8 @@
                 DynamicParamDictionary = $DynamicParamDictionary
             }
             New-DynamicParam @dynParam2
-
             return $DynamicParamDictionary
         }
-
-        .NOTES
-        https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced_parameters?view=powershell-7.3#psdefaultvalue-attribute-arguments
-
-        #Default Value
-        # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced_parameters?view=powershell-7.3#psdefaultvalue-attribute-arguments
-        # https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.runtimedefinedparameter.value?view=powershellsdk-7.3.0
     #>
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
@@ -84,7 +74,7 @@
         [Parameter()]
         [switch] $ValueFromPipelineByPropertyName,
 
-        # Specifies if the parameter accepts values from the remaining command line arguments that are not associated with another parameter.
+        # Specifies if the parameter accepts values from the remaining command-line arguments that are not associated with another parameter.
         # Parameter Set specific
         [Parameter()]
         [switch] $ValueFromRemainingArguments,
@@ -102,7 +92,7 @@
         [Parameter()]
         [scriptblock] $ValidateScript,
 
-        # Specifies the validate regex pattern of the parameter.
+        # Specifies the validate regular expression pattern of the parameter.
         [Parameter()]
         [regex] $ValidatePattern,
 
