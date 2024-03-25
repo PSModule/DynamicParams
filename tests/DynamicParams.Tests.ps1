@@ -5,7 +5,7 @@
             Write-Verbose (Get-Module -Name 'DynamicParams' -ListAvailable | Out-String) -Verbose
         }
         It 'The module should be importable' {
-            { Import-Module -Name 'DynamicParams' } | Should -Not -Throw
+            { Import-Module -Name 'DynamicParams' -Verbose -Force } | Should -Not -Throw
         }
     }
 }
