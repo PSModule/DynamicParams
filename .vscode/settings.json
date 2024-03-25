@@ -22,7 +22,7 @@
     "[yaml]": {
         "editor.defaultFormatter": "github.vscode-github-actions",
         "editor.insertSpaces": true,
-        "editor.tabSize": 2,
+        "editor.tabSize": 2
     },
     "[github-actions-workflow]": {
         "editor.defaultFormatter": "github.vscode-github-actions",
