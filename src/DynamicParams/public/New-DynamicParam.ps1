@@ -27,10 +27,6 @@
             New-DynamicParam @dynParam2
             return $DynamicParamDictionary
         }
-
-        .NOTES
-        <https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced_parameters?view=powershell-7.3#psdefaultvalue-attribute-arguments>
-        <https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.runtimedefinedparameter.value?view=powershellsdk-7.3.0>
     #>
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
