@@ -33,6 +33,10 @@
         $Param2 = $PSBoundParameters['Param2']
         $Param3 = $PSBoundParameters['Param3']
 
+        # $PSBoundParameters.Keys | ForEach-Object {
+        #     Set-Variable -Name $_ -Value $PSBoundParameters[$_]
+        # }
+
         Write-Host "Param1: $Param1"
         Write-Host "Param2: $Param2"
         Write-Host "Param3: $Param3"
