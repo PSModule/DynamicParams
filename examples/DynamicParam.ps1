@@ -33,10 +33,10 @@
         $Param2 = $PSBoundParameters['Param2']
         $Param3 = $PSBoundParameters['Param3']
 
-        Write-Host "Param1: $Param1"
-        Write-Host "Param2: $Param2"
-        Write-Host "Param3: $Param3"
+        Write-Verbose "Param1: $Param1"
+        Write-Verbose "Param2: $Param2"
+        Write-Verbose "Param3: $Param3"
     }
 }
 
-Test-DynParam -Param1 A -Param3 PerfLogs
+Test-DynParam -Param1 A -Param3 PerfLogs -Verbose
