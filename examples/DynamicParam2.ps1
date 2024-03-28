@@ -34,10 +34,10 @@
             Set-Variable -Name $_ -Value $PSBoundParameters[$_]
         }
 
-        Write-Host "Param1: $Param1"
-        Write-Host "Process: $Process"
-        Write-Host "Service: $Service"
+        Write-Verbose "Param1: $Param1"
+        Write-Verbose "Process: $Process"
+        Write-Verbose "Service: $Service"
     }
 }
 
-Test-DynParam -Param1 A -Service SDRSVC
+Test-DynParam -Param1 A -Service SDRSVC -Verbose
