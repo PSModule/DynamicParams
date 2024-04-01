@@ -96,6 +96,11 @@
         [Parameter()]
         [regex] $ValidatePattern,
 
+        # Specifies the validate regular expression pattern options of the parameter.
+        # For more info see [RegexOptions](https://learn.microsoft.com/dotnet/api/system.text.regularexpressions.regexoptions).
+        [Parameter()]
+        [System.Text.RegularExpressions.RegexOptions[]] $ValidatePatternOptions,
+
         # Specifies the validate number of items for the parameter.
         [Parameter()]
         [ValidateCount(2, 2)]
@@ -118,6 +123,16 @@
         [Parameter()]
         [switch] $ValidateNotNullOrEmpty,
 
+        # The custom error message pattern that is displayed to the user if validation fails.
+        # This parameter is not supported on Windows PowerShell Desktop Edition, if specified it will be ignored.
+        #
+        # Examples of how to use this parameter:
+        # - `ValidatePattern` -> "The text '{0}' did not pass validation of the regular expression '{1}'". {0} is the value, {1} is the pattern.
+        # - `ValidateSet` -> "The item '{0}' is not part of the set '{1}'. {0} is the value, {1} is the set.
+        # - `ValidateScript` -> "The item '{0}' did not pass validation of script '{1}'". {0} is the value, {1} is the script.
+        [Parameter()]
+        [string] $ValidationErrorMessage,
+
         # Specifies if the parameter accepts wildcards.
         [Parameter()]
         [switch] $SupportsWildcards,
@@ -138,6 +153,14 @@
         [Parameter()]
         [System.Management.Automation.RuntimeDefinedParameterDictionary] $DynamicParamDictionary
     )
+
+    $isDesktop = $PSVersionTable.PSEdition -eq 'Desktop'
+
+    if ($isDesktop) {
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage')) {
+            Write-Warning "Unsupported parameter: 'ValidationErrorMessage' is not supported in Windows PowerShell Desktop Edition. Skipping it."
+        }
+    }
 
     $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
 
@@ -168,6 +191,9 @@
 
     if ($PSBoundParameters.ContainsKey('ValidateSet')) {
         $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSet)
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
+            $validateSetAttribute.ErrorMessage = $ValidationErrorMessage
+        }
         $attributeCollection.Add($validateSetAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateNotNullOrEmpty')) {
@@ -184,10 +210,19 @@
     }
     if ($PSBoundParameters.ContainsKey('ValidateScript')) {
         $validateScriptAttribute = New-Object System.Management.Automation.ValidateScriptAttribute($ValidateScript)
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
+            $validateScriptAttribute.ErrorMessage = $ValidationErrorMessage
+        }
         $attributeCollection.Add($validateScriptAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidatePattern')) {
         $validatePatternAttribute = New-Object System.Management.Automation.ValidatePatternAttribute($ValidatePattern)
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
+            $validatePatternAttribute.ErrorMessage = $ValidationErrorMessage
+        }
+        if ($PSBoundParameters.ContainsKey('ValidatePatternOptions')) {
+            $validatePatternAttribute.Options = $ValidatePatternOptions
+        }
         $attributeCollection.Add($validatePatternAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateRange')) {
