@@ -158,7 +158,7 @@
 
     if ($isDesktop) {
         if ($PSBoundParameters.ContainsKey('ValidationErrorMessage')) {
-            Write-Warning "ValidationErrorMessage is not supported in Windows PowerShell Desktop Edition. Skipping it."
+            Write-Warning "Unsupported parameter: 'ValidationErrorMessage' is not supported in Windows PowerShell Desktop Edition. Skipping it."
         }
     }
 
