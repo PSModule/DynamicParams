@@ -126,7 +126,7 @@
         # The custom error message pattern that is displayed to the user if validation fails.
         #
         # Examples of how to use this parameter:
-        # - `ValidatePattern` -> "The text '{0}' did not pass validation of regex '{1}'". {0} is the value, {1} is the pattern.
+        # - `ValidatePattern` -> "The text '{0}' did not pass validation of the regular expression '{1}'". {0} is the value, {1} is the pattern.
         # - `ValidateSet` -> "The item '{0}' is not part of the set '{1}'. {0} is the value, {1} is the set.
         # - `ValidateScript` -> "The item '{0}' did not pass validation of script '{1}'". {0} is the value, {1} is the script.
         [Parameter()]
