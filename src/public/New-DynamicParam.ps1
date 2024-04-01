@@ -153,6 +153,14 @@
         [System.Management.Automation.RuntimeDefinedParameterDictionary] $DynamicParamDictionary
     )
 
+    $isDesktop = $PSVersionTable.PSEdition -eq 'Desktop'
+
+    if ($isDesktop) {
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage')) {
+            Write-Warning "ValidationErrorMessage is not supported in Windows PowerShell Desktop Edition. Skipping it."
+        }
+    }
+
     $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
 
     # foreach ParameterSet in ParameterSets , Key = name, Value = Hashtable
@@ -182,7 +190,7 @@
 
     if ($PSBoundParameters.ContainsKey('ValidateSet')) {
         $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSet)
-        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage')) {
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
             $validateSetAttribute.ErrorMessage = $ValidationErrorMessage
         }
         $attributeCollection.Add($validateSetAttribute)
@@ -201,14 +209,14 @@
     }
     if ($PSBoundParameters.ContainsKey('ValidateScript')) {
         $validateScriptAttribute = New-Object System.Management.Automation.ValidateScriptAttribute($ValidateScript)
-        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage')) {
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
             $validateScriptAttribute.ErrorMessage = $ValidationErrorMessage
         }
         $attributeCollection.Add($validateScriptAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidatePattern')) {
         $validatePatternAttribute = New-Object System.Management.Automation.ValidatePatternAttribute($ValidatePattern)
-        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage')) {
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
             $validatePatternAttribute.ErrorMessage = $ValidationErrorMessage
         }
         if ($PSBoundParameters.ContainsKey('ValidatePatternOptions')) {
