@@ -149,11 +149,11 @@ Describe 'DynamicParams' {
         }
 
         It 'Test-DynParam should not throw an exception' {
-            { Test-DynParam -Variable HOME -EnvironmentVariable OS -Verbose } | Should -Not -Throw
+            { Test-DynParam -Variable HOME -EnvironmentVariable RUNNER_OS -Verbose } | Should -Not -Throw
         }
 
         It 'Test-DynParam2 should not throw an exception' {
-            { Test-DynParam2 -Variable HOME -EnvironmentVariable OS -Verbose } | Should -Not -Throw
+            { Test-DynParam2 -Variable HOME -EnvironmentVariable RUNNER_OS -Verbose } | Should -Not -Throw
         }
     }
 }
