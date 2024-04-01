@@ -18,14 +18,19 @@ Describe 'DynamicParams' {
         }
     }
 
-    Context "Function: New-DynamicParamDictionary" {
-        It "New-DynamicParamDictionary should not throw an exception" {
-            New-DynamicParamDictionary | Should -BeOfType 'System.Management.Automation.RuntimeDefinedParameterDictionary'
+    Context 'Function: New-DynamicParamDictionary' {
+        It 'New-DynamicParamDictionary should not throw an exception' {
+            { New-DynamicParamDictionary } | Should -Not -Throw
+        }
+
+        It 'New-DynamicParamDictionary should return a RuntimeDefinedParameterDictionary' {
+            $dictionary = New-DynamicParamDictionary
+            $dictionary | Should -BeOfType 'System.Management.Automation.RuntimeDefinedParameterDictionary'
         }
     }
 
-    Context "Function: New-DynamicParam" {
-        It "New-DynamicParam should not throw an exception" {
+    Context 'Function: New-DynamicParam' {
+        It 'New-DynamicParam should not throw an exception' {
             $dictionary = New-DynamicParamDictionary
             $dynParam = @{
                 Name                   = 'Param1'
@@ -33,10 +38,10 @@ Describe 'DynamicParams' {
                 ValidateSet            = 'A', 'B', 'C'
                 DynamicParamDictionary = $dictionary
             }
-            New-DynamicParam @dynParam | Should -Not -Throw
+            { New-DynamicParam @dynParam } | Should -Not -Throw
         }
 
-        It "New-DynamicParam should return a RuntimeDefinedParameter" {
+        It 'New-DynamicParam should return a RuntimeDefinedParameter' {
             $dictionary = New-DynamicParamDictionary
             $dynParam = @{
                 Name                   = 'Param1'
@@ -48,7 +53,7 @@ Describe 'DynamicParams' {
             $param | Should -BeOfType 'System.Management.Automation.RuntimeDefinedParameter'
         }
 
-        It "New-DynamicParam should return a RuntimeDefinedParameter with the correct name" {
+        It 'New-DynamicParam should return a RuntimeDefinedParameter with the correct name' {
             $dictionary = New-DynamicParamDictionary
             $dynParam = @{
                 Name                   = 'Param1'
@@ -74,33 +79,31 @@ Describe 'DynamicParams' {
                 DynamicParam {
                     $DynamicParamDictionary = New-DynamicParamDictionary
 
-                    $dynParam2 = @{
-                        Name                   = 'Param2'
+                    $dynVariable = @{
+                        Name                   = 'Variable'
                         Type                   = [string]
-                        ValidateSet            = Get-Process | Select-Object -ExpandProperty Name
+                        ValidateSet            = Get-Variable | Select-Object -ExpandProperty Name
                         DynamicParamDictionary = $DynamicParamDictionary
                     }
-                    New-DynamicParam @dynParam2
+                    New-DynamicParam @dynVariable
 
-                    $dynParam3 = @{
-                        Name                   = 'Param3'
+                    $dynEnvironmentVariable = @{
+                        Name                   = 'EnvironmentVariable'
                         Type                   = [string]
-                        ValidateSet            = Get-ChildItem -Path C:\ | Select-Object -ExpandProperty Name
+                        ValidateSet            = Get-ChildItem -Path env: | Select-Object -ExpandProperty Name
                         DynamicParamDictionary = $DynamicParamDictionary
                     }
-                    New-DynamicParam @dynParam3
+                    New-DynamicParam @dynEnvironmentVariable
 
                     return $DynamicParamDictionary
                 }
 
                 process {
-                    $Param1 = $PSBoundParameters['Param1']
-                    $Param2 = $PSBoundParameters['Param2']
-                    $Param3 = $PSBoundParameters['Param3']
+                    $Variable = $PSBoundParameters['Variable']
+                    $EnvironmentVariable = $PSBoundParameters['EnvironmentVariable']
 
-                    Write-Verbose "Param1: $Param1"
-                    Write-Verbose "Param2: $Param2"
-                    Write-Verbose "Param3: $Param3"
+                    Write-Verbose "Variable:            $Variable"
+                    Write-Verbose "EnvironmentVariable: $EnvironmentVariable"
                 }
             }
 
@@ -111,26 +114,25 @@ Describe 'DynamicParams' {
                     [ValidateSet('A', 'B', 'C')]
                     [string]$Param1
                 )
+
                 DynamicParam {
                     $DynamicParamDictionary = New-DynamicParamDictionary
 
-                    $dynParam = @{
-                        Name                   = 'Process'
-                        Alias                  = 'proc'
+                    $dynVariable = @{
+                        Name                   = 'Variable'
                         Type                   = [string]
-                        ValidateSet            = Get-Process -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name -Unique
+                        ValidateSet            = Get-Variable | Select-Object -ExpandProperty Name
                         DynamicParamDictionary = $DynamicParamDictionary
                     }
-                    New-DynamicParam @dynParam
+                    New-DynamicParam @dynVariable
 
-                    $dynParam2 = @{
-                        Name                   = 'Service'
-                        Alias                  = 'svc'
+                    $dynEnvironmentVariable = @{
+                        Name                   = 'EnvironmentVariable'
                         Type                   = [string]
-                        ValidateSet            = Get-Service -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name -Unique
+                        ValidateSet            = Get-ChildItem -Path env: | Select-Object -ExpandProperty Name
                         DynamicParamDictionary = $DynamicParamDictionary
                     }
-                    New-DynamicParam @dynParam2
+                    New-DynamicParam @dynEnvironmentVariable
 
                     return $DynamicParamDictionary
                 }
@@ -140,19 +142,18 @@ Describe 'DynamicParams' {
                         Set-Variable -Name $_ -Value $PSBoundParameters[$_]
                     }
 
-                    Write-Verbose "Param1: $Param1"
-                    Write-Verbose "Process: $Process"
-                    Write-Verbose "Service: $Service"
+                    Write-Verbose "Variable:            $Variable"
+                    Write-Verbose "EnvironmentVariable: $EnvironmentVariable"
                 }
             }
         }
 
-        It "Test-DynParam should not throw an exception" {
-            Test-DynParam -Param1 A -Param3 PerfLogs -Verbose | Should -Not -Throw
+        It 'Test-DynParam should not throw an exception' {
+            { Test-DynParam -Variable HOME -EnvironmentVariable OS -Verbose } | Should -Not -Throw
         }
 
-        It "Test-DynParam2 should not throw an exception" {
-            Test-DynParam2 -Param1 A -Verbose | Should -Not -Throw
+        It 'Test-DynParam2 should not throw an exception' {
+            { Test-DynParam2 -Variable HOME -EnvironmentVariable OS -Verbose } | Should -Not -Throw
         }
     }
 }
