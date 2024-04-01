@@ -182,7 +182,9 @@
 
     if ($PSBoundParameters.ContainsKey('ValidateSet')) {
         $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSet)
-        $validateSetAttribute.ErrorMessage = $ValidationErrorMessage
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage')) {
+            $validateSetAttribute.ErrorMessage = $ValidationErrorMessage
+        }
         $attributeCollection.Add($validateSetAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateNotNullOrEmpty')) {
@@ -199,13 +201,19 @@
     }
     if ($PSBoundParameters.ContainsKey('ValidateScript')) {
         $validateScriptAttribute = New-Object System.Management.Automation.ValidateScriptAttribute($ValidateScript)
-        $validateScriptAttribute.ErrorMessage = $ValidationErrorMessage
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage')) {
+            $validateScriptAttribute.ErrorMessage = $ValidationErrorMessage
+        }
         $attributeCollection.Add($validateScriptAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidatePattern')) {
         $validatePatternAttribute = New-Object System.Management.Automation.ValidatePatternAttribute($ValidatePattern)
-        $validatePatternAttribute.ErrorMessage = $ValidationErrorMessage
-        $validatePatternAttribute.Options = $ValidatePatternOptions
+        if ($PSBoundParameters.ContainsKey('ValidationErrorMessage')) {
+            $validatePatternAttribute.ErrorMessage = $ValidationErrorMessage
+        }
+        if ($PSBoundParameters.ContainsKey('ValidatePatternOptions')) {
+            $validatePatternAttribute.Options = $ValidatePatternOptions
+        }
         $attributeCollection.Add($validatePatternAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateRange')) {
