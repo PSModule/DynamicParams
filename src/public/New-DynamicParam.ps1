@@ -124,6 +124,7 @@
         [switch] $ValidateNotNullOrEmpty,
 
         # The custom error message pattern that is displayed to the user if validation fails.
+        # This parameter is not supported on Windows PowerShell Desktop Edition, if specified it will be ignored.
         #
         # Examples of how to use this parameter:
         # - `ValidatePattern` -> "The text '{0}' did not pass validation of the regular expression '{1}'". {0} is the value, {1} is the pattern.
