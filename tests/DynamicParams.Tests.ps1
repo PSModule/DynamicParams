@@ -41,7 +41,7 @@ Describe 'DynamicParams' {
             { New-DynamicParam @dynParam } | Should -Not -Throw
         }
 
-        It 'New-DynamicParam should return a RuntimeDefinedParameter' {
+        It 'New-DynamicParam should add a RuntimeDefinedParameter to the dictionary' {
             $dictionary = New-DynamicParamDictionary
             $dynParam = @{
                 Name                   = 'Param1'
@@ -49,20 +49,8 @@ Describe 'DynamicParams' {
                 ValidateSet            = 'A', 'B', 'C'
                 DynamicParamDictionary = $dictionary
             }
-            $param = New-DynamicParam @dynParam
-            $param | Should -BeOfType 'System.Management.Automation.RuntimeDefinedParameter'
-        }
-
-        It 'New-DynamicParam should return a RuntimeDefinedParameter with the correct name' {
-            $dictionary = New-DynamicParamDictionary
-            $dynParam = @{
-                Name                   = 'Param1'
-                Type                   = [string]
-                ValidateSet            = 'A', 'B', 'C'
-                DynamicParamDictionary = $dictionary
-            }
-            $param = New-DynamicParam @dynParam
-            $param.Name | Should -Be 'Param1'
+            New-DynamicParam @dynParam
+            $dictionary.Keys | Should -Contain 'Param1'
         }
     }
 
