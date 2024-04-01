@@ -19,5 +19,5 @@
     [CmdletBinding()]
     param()
 
-    return [System.Management.Automation.RuntimeDefinedParameterDictionary]::new()
+    [System.Management.Automation.RuntimeDefinedParameterDictionary]::new()
 }

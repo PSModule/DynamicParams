@@ -96,6 +96,11 @@
         [Parameter()]
         [regex] $ValidatePattern,
 
+        # Specifies the validate regular expression pattern options of the parameter.
+        # For more info see [RegexOptions](https://learn.microsoft.com/dotnet/api/system.text.regularexpressions.regexoptions).
+        [Parameter()]
+        [System.Text.RegularExpressions.RegexOptions[]] $ValidatePatternOptions,
+
         # Specifies the validate number of items for the parameter.
         [Parameter()]
         [ValidateCount(2, 2)]
@@ -117,6 +122,15 @@
         # Specifies if the parameter accepts null or empty values.
         [Parameter()]
         [switch] $ValidateNotNullOrEmpty,
+
+        # The custom error message pattern that is displayed to the user if validation fails.
+        #
+        # Examples of how to use this parameter:
+        # - `ValidatePattern` -> "The text '{0}' did not pass validation of regex '{1}'". {0} is the value, {1} is the pattern.
+        # - `ValidateSet` -> "The item '{0}' is not part of the set '{1}'. {0} is the value, {1} is the set.
+        # - `ValidateScript` -> "The item '{0}' did not pass validation of script '{1}'". {0} is the value, {1} is the script.
+        [Parameter()]
+        [string] $ValidationErrorMessage,
 
         # Specifies if the parameter accepts wildcards.
         [Parameter()]
@@ -168,6 +182,7 @@
 
     if ($PSBoundParameters.ContainsKey('ValidateSet')) {
         $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSet)
+        $validateSetAttribute.ErrorMessage = $ValidationErrorMessage
         $attributeCollection.Add($validateSetAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateNotNullOrEmpty')) {
@@ -184,10 +199,13 @@
     }
     if ($PSBoundParameters.ContainsKey('ValidateScript')) {
         $validateScriptAttribute = New-Object System.Management.Automation.ValidateScriptAttribute($ValidateScript)
+        $validateScriptAttribute.ErrorMessage = $ValidationErrorMessage
         $attributeCollection.Add($validateScriptAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidatePattern')) {
         $validatePatternAttribute = New-Object System.Management.Automation.ValidatePatternAttribute($ValidatePattern)
+        $validatePatternAttribute.ErrorMessage = $ValidationErrorMessage
+        $validatePatternAttribute.Options = $ValidatePatternOptions
         $attributeCollection.Add($validatePatternAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateRange')) {
