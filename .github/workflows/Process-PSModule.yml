@@ -12,6 +12,8 @@ on:
       - reopened
       - synchronize
       - labeled
+  schedule:
+    - cron: '0 0 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
