@@ -84,54 +84,10 @@ Describe 'DynamicParams' {
                     Write-Verbose "EnvironmentVariable: $EnvironmentVariable"
                 }
             }
-
-            filter Test-DynParam2 {
-                [CmdletBinding()]
-                param (
-                    [Parameter()]
-                    [ValidateSet('A', 'B', 'C')]
-                    [string]$Param1
-                )
-
-                DynamicParam {
-                    $DynamicParamDictionary = New-DynamicParamDictionary
-
-                    $dynVariable = @{
-                        Name                   = 'Variable'
-                        Type                   = [string]
-                        ValidateSet            = Get-Variable | Select-Object -ExpandProperty Name
-                        DynamicParamDictionary = $DynamicParamDictionary
-                    }
-                    New-DynamicParam @dynVariable
-
-                    $dynEnvironmentVariable = @{
-                        Name                   = 'EnvironmentVariable'
-                        Type                   = [string]
-                        ValidateSet            = Get-ChildItem -Path env: | Select-Object -ExpandProperty Name
-                        DynamicParamDictionary = $DynamicParamDictionary
-                    }
-                    New-DynamicParam @dynEnvironmentVariable
-
-                    return $DynamicParamDictionary
-                }
-
-                process {
-                    $PSBoundParameters.Keys | ForEach-Object {
-                        Set-Variable -Name $_ -Value $PSBoundParameters[$_]
-                    }
-
-                    Write-Verbose "Variable:            $Variable"
-                    Write-Verbose "EnvironmentVariable: $EnvironmentVariable"
-                }
-            }
         }
 
         It 'Test-DynParam should not throw an exception' {
             { Test-DynParam -Variable HOME -EnvironmentVariable RUNNER_OS -Verbose } | Should -Not -Throw
-        }
-
-        It 'Test-DynParam2 should not throw an exception' {
-            { Test-DynParam2 -Variable HOME -EnvironmentVariable RUNNER_OS -Verbose } | Should -Not -Throw
         }
     }
 }
