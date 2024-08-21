@@ -10,6 +10,9 @@
         New-DynamicParamDictionary
 
         Returns a new RuntimeDefinedParameterDictionary
+
+        .LINK
+        https://psmodule.io/DynamicParams/New-DynamicParamDictionary
     #>
     [OutputType([System.Management.Automation.RuntimeDefinedParameterDictionary])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

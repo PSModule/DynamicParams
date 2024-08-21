@@ -7,7 +7,7 @@
         Creates a new dynamic parameter for a function.
 
         .EXAMPLE
-        DynamicParam {
+        dynamicparam {
             $DynamicParamDictionary = New-DynamicParamDictionary
             $dynParam = @{
                 Name                   = 'GitignoreTemplate'
@@ -27,6 +27,9 @@
             New-DynamicParam @dynParam2
             return $DynamicParamDictionary
         }
+
+        .LINK
+        https://psmodule.io/DynamicParams/New-DynamicParam
     #>
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
