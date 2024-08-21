@@ -12,7 +12,7 @@
         Returns a new RuntimeDefinedParameterDictionary
 
         .LINK
-        https://psmodule.io/DynamicParams/New-DynamicParamDictionary
+        https://psmodule.io/DynamicParams/Functions/New-DynamicParamDictionary/
     #>
     [OutputType([System.Management.Automation.RuntimeDefinedParameterDictionary])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

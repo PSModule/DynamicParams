@@ -29,7 +29,7 @@
         }
 
         .LINK
-        https://psmodule.io/DynamicParams/New-DynamicParam
+        https://psmodule.io/DynamicParams/Functions/New-DynamicParam/
     #>
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
