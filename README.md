@@ -25,13 +25,13 @@ This section should provide a good overview of the module's capabilities.
 Here is an example of how to use dynamic parameters in a function.
 
 ```powershell
-#REQUIRES -Modules DynamicParams
+#Requires -Modules DynamicParams
 
 function Get-Info {
     [CmdletBinding()]
     param ()
 
-    DynamicParam {
+    dynamicparam {
         $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{
@@ -54,6 +54,8 @@ function Get-Info {
 
         return $DynamicParamDictionary
     }
+
+    ...
 }
 
 ```

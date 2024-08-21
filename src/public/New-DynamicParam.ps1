@@ -7,7 +7,7 @@
         Creates a new dynamic parameter for a function.
 
         .EXAMPLE
-        DynamicParam {
+        dynamicparam {
             $DynamicParamDictionary = New-DynamicParamDictionary
             $dynParam = @{
                 Name                   = 'GitignoreTemplate'
