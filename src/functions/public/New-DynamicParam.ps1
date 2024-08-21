@@ -27,6 +27,9 @@
             New-DynamicParam @dynParam2
             return $DynamicParamDictionary
         }
+
+        .LINK
+        https://psmodule.io/DynamicParams/New-DynamicParam
     #>
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
