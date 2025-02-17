@@ -38,6 +38,10 @@
     Context 'Integration' {
         BeforeAll {
             filter Test-DynParam {
+                <#
+                    .SYNOPSIS
+                    This is a test of dynamic parameters.
+                #>
                 [CmdletBinding()]
                 param (
                     [Parameter()]
@@ -45,7 +49,7 @@
                     [string]$Param1
                 )
 
-                DynamicParam {
+                dynamicparam {
                     $DynamicParamDictionary = New-DynamicParamDictionary
 
                     $dynVariable = @{
