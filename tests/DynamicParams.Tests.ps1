@@ -192,12 +192,12 @@
 
                 dynamicparam {
                     $params = @(
-                        DynamicParam @{
+                        @{
                             Name        = 'Variable'
                             Type        = [string]
                             ValidateSet = Get-Variable | Select-Object -ExpandProperty Name
                         },
-                        DynamicParam @{
+                        @{
                             Name        = 'EnvironmentVariable'
                             Type        = [string]
                             ValidateSet = Get-ChildItem -Path env: | Select-Object -ExpandProperty Name
