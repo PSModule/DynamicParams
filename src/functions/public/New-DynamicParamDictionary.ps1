@@ -82,17 +82,12 @@
         'PSUseShouldProcessForStateChangingFunctions', '',
         Justification = 'Function does not change state.'
     )]
-    [CmdletBinding(DefaultParameterSetName = 'Create parameter dictionary')]
+    [CmdletBinding()]
     param(
         # An array of hashtables or RuntimeDefinedParameter objects to add to the dictionary.
-        [Parameter(Position = 0, ValueFromPipeline, ParameterSetName = 'Input as RuntimeParam')]
-        [ValidateNotNull()]
-        [System.Management.Automation.RuntimeDefinedParameter] $RuntimeParameters,
-
-        # An hashtables or RuntimeDefinedParameter objects to add to the dictionary.
-        [Parameter(Position = 0, ValueFromPipeline, ParameterSetName = 'Input as Hashtable')]
-        [ValidateNotNull()]
-        [System.Collections.IDictionary] $Hashtable
+        [Parameter(Position = 0, ValueFromPipeline)]
+        [ValidateNotNullOrEmpty()]
+        [object] $ParameterDefinition
     )
 
     begin {
@@ -100,18 +95,11 @@
     }
 
     process {
-        switch ($PSCmdlet.ParameterSetName) {
-            'Input as RuntimeParam' {
-                foreach ($RuntimeParameter in $RuntimeParameters) {
-                    $dictionary.Add($RuntimeParameter.Name, $RuntimeParameter)
-                }
+        foreach ($param in $ParameterDefinition) {
+            if ($param -is [hashtable]) {
+                $param = New-DynamicParam @param
             }
-            'Input as Hashtable' {
-                foreach ($entry in $Hashtable) {
-                    $param = New-DynamicParam @entry
-                    $dictionary.Add($param.Name, $param)
-                }
-            }
+            $dictionary.Add($param.Name, $param)
         }
     }
 

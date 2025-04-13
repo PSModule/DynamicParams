@@ -37,6 +37,7 @@
         .LINK
         https://psmodule.io/DynamicParams/Functions/New-DynamicParam/
     #>
+    [Alias('DynamicParam')]
     [OutputType(ParameterSetName = 'Add to dictionary', [void])]
     [OutputType(ParameterSetName = 'Return parameter', [System.Management.Automation.RuntimeDefinedParameter])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
