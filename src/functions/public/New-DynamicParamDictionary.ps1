@@ -25,7 +25,7 @@
         # An array of hashtables or RuntimeDefinedParameter objects to add to the dictionary.
         [Parameter(Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
-        [object[]] $ParameterDefinition
+        [object] $ParameterDefinition
     )
 
     begin {
@@ -37,7 +37,7 @@
             if ($param -is [hashtable]) {
                 $param = New-DynamicParam @param
             }
-            $dicationary.Add($param.Name, $param)
+            $dictionary.Add($param.Name, $param)
         }
     }
 
