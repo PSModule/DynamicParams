@@ -1,4 +1,4 @@
-﻿function New-DynamicParam {
+﻿filter New-DynamicParam {
     <#
         .SYNOPSIS
         Creates a new dynamic parameter for a function.
@@ -49,88 +49,88 @@
     [CmdletBinding(DefaultParameterSetName = 'Return parameter')]
     param(
         # Specifies the name of the parameter.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Name,
 
         # Specifies the aliases of the parameter.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string[]] $Alias,
 
         # Specifies the data type of the parameter.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [type] $Type,
 
         # Specifies the parameter set name.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $ParameterSetName = '__AllParameterSets',
 
         # Specifies if the parameter is mandatory.
         # Parameter Set specific
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [switch] $Mandatory,
 
         # Specifies the parameters positional binding.
         # Parameter Set specific
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [int] $Position,
 
         # Specifies if the parameter accepts values from the pipeline.
         # Parameter Set specific
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [switch] $ValueFromPipeline,
 
         # Specifies if the parameter accepts values from the pipeline by property name.
         # Parameter Set specific
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [switch] $ValueFromPipelineByPropertyName,
 
         # Specifies if the parameter accepts values from the remaining command-line arguments that are not associated with another parameter.
         # Parameter Set specific
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [switch] $ValueFromRemainingArguments,
 
         # Specifies the help message of the parameter.
         # Parameter Set specific
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $HelpMessage,
 
         # Specifies the comments of the parameter.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Comment,
 
         # Specifies the validate script of the parameter.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [scriptblock] $ValidateScript,
 
         # Specifies the validate regular expression pattern of the parameter.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [regex] $ValidatePattern,
 
         # Specifies the validate regular expression pattern options of the parameter.
         # For more info see [RegexOptions](https://learn.microsoft.com/dotnet/api/system.text.regularexpressions.regexoptions).
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [System.Text.RegularExpressions.RegexOptions[]] $ValidatePatternOptions,
 
         # Specifies the validate number of items for the parameter.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [ValidateCount(2, 2)]
         [int[]] $ValidateCount,
 
         # Specifies the validate range of the parameter.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [object] $ValidateRange,
 
         # Specifies the validate set of the parameter.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [object] $ValidateSet,
 
         # Specifies the validate length of the parameter.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [ValidateCount(2, 2)]
         [int[]] $ValidateLength,
 
         # Specifies if the parameter accepts null or empty values.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [switch] $ValidateNotNullOrEmpty,
 
         # The custom error message pattern that is displayed to the user if validation fails.
@@ -140,30 +140,29 @@
         # - `ValidatePattern` -> "The text '{0}' did not pass validation of the regular expression '{1}'". {0} is the value, {1} is the pattern.
         # - `ValidateSet` -> "The item '{0}' is not part of the set '{1}'. {0} is the value, {1} is the set.
         # - `ValidateScript` -> "The item '{0}' did not pass validation of script '{1}'". {0} is the value, {1} is the script.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $ValidationErrorMessage,
 
         # Specifies if the parameter accepts wildcards.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [switch] $SupportsWildcards,
 
         # Specifies if the parameter accepts empty strings.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [switch] $AllowEmptyString,
 
         # Specifies if the parameter accepts null values.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [switch] $AllowNull,
 
         # Specifies if the parameter accepts empty collections.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [switch] $AllowEmptyCollection,
 
         # Specifies the dynamic parameter dictionary.
         [Parameter(ParameterSetName = 'Add to dictionary')]
         [System.Management.Automation.RuntimeDefinedParameterDictionary] $DynamicParamDictionary
     )
-
     $isDesktop = $PSVersionTable.PSEdition -eq 'Desktop'
 
     if ($isDesktop) {
