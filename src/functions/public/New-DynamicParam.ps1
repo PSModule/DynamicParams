@@ -12,7 +12,7 @@
             $dynParam = @{
                 Name                   = 'GitignoreTemplate'
                 Alias                  = 'gitignore_template'
-                Type                   = [string]
+                Type                   = New-Object string]
                 ValidateSet            = Get-GitHubGitignoreList
                 DynamicParamDictionary = $DynamicParamDictionary
             }
@@ -20,7 +20,7 @@
             $dynParam2 = @{
                 Name                   = 'LicenseTemplate'
                 Alias                  = 'license_template'
-                Type                   = [string]
+                Type                   = New-Object string]
                 ValidateSet            = Get-GitHubLicenseList | Select-Object -ExpandProperty key
                 DynamicParamDictionary = $DynamicParamDictionary
             }
@@ -172,10 +172,10 @@
         }
     }
 
-    $attributeCollection = [System.Collections.ObjectModel.Collection[System.Attribute]]::new()
+    $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
 
     # foreach ParameterSet in ParameterSets , Key = name, Value = Hashtable
-    $parameterAttribute = [System.Management.Automation.ParameterAttribute]::new()
+    $parameterAttribute = New-Object System.Management.Automation.ParameterAttribute
 
     $parameterAttribute.ParameterSetName = $ParameterSetName
     if ($PSBoundParameters.ContainsKey('HelpMessage')) {
@@ -192,7 +192,7 @@
 
     if ($PSBoundParameters.ContainsKey('Alias')) {
         $Alias | ForEach-Object {
-            $aliasAttribute = [System.Management.Automation.AliasAttribute]::new($_)
+            $aliasAttribute = New-Object System.Management.Automation.AliasAttribute($_)
             $attributeCollection.Add($aliasAttribute)
         }
     }
@@ -200,33 +200,33 @@
     # TODO: Add ability to add a param doc/comment
 
     if ($PSBoundParameters.ContainsKey('ValidateSet')) {
-        $validateSetAttribute = [System.Management.Automation.ValidateSetAttribute]::new($ValidateSet)
+        $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSet)
         if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
             $validateSetAttribute.ErrorMessage = $ValidationErrorMessage
         }
         $attributeCollection.Add($validateSetAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateNotNullOrEmpty')) {
-        $validateNotNullOrEmptyAttribute = [System.Management.Automation.ValidateNotNullOrEmptyAttribute]::new()
+        $validateNotNullOrEmptyAttribute = New-Object System.Management.Automation.ValidateNotNullOrEmptyAttribute
         $attributeCollection.Add($validateNotNullOrEmptyAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateLength')) {
-        $validateLengthAttribute = [System.Management.Automation.ValidateLengthAttribute]::new($ValidateLength[0], $ValidateLength[1])
+        $validateLengthAttribute = New-Object System.Management.Automation.ValidateLengthAttribute($ValidateLength[0], $ValidateLength[1])
         $attributeCollection.Add($validateLengthAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateCount')) {
-        $validateCountAttribute = [System.Management.Automation.ValidateCountAttribute]::new($ValidateCount[0], $ValidateCount[1])
+        $validateCountAttribute = New-Object System.Management.Automation.ValidateCountAttribute($ValidateCount[0], $ValidateCount[1])
         $attributeCollection.Add($validateCountAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateScript')) {
-        $validateScriptAttribute = [System.Management.Automation.ValidateScriptAttribute]::new($ValidateScript)
+        $validateScriptAttribute = New-Object System.Management.Automation.ValidateScriptAttribute($ValidateScript)
         if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
             $validateScriptAttribute.ErrorMessage = $ValidationErrorMessage
         }
         $attributeCollection.Add($validateScriptAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidatePattern')) {
-        $validatePatternAttribute = [System.Management.Automation.ValidatePatternAttribute]::new($ValidatePattern)
+        $validatePatternAttribute = New-Object System.Management.Automation.ValidatePatternAttribute($ValidatePattern)
         if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
             $validatePatternAttribute.ErrorMessage = $ValidationErrorMessage
         }
@@ -236,27 +236,27 @@
         $attributeCollection.Add($validatePatternAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateRange')) {
-        $validateRangeAttribute = [System.Management.Automation.ValidateRangeAttribute]::new($ValidateRange)
+        $validateRangeAttribute = New-Object System.Management.Automation.ValidateRangeAttribute($ValidateRange)
         $attributeCollection.Add($validateRangeAttribute)
     }
     if ($PSBoundParameters.ContainsKey('SupportsWildcards')) {
-        $supportsWildcardsAttribute = [System.Management.Automation.SupportsWildcardsAttribute]::new()
+        $supportsWildcardsAttribute = New-Object System.Management.Automation.SupportsWildcardsAttribute
         $attributeCollection.Add($supportsWildcardsAttribute)
     }
     if ($PSBoundParameters.ContainsKey('AllowEmptyString')) {
-        $allowEmptyStringAttribute = [System.Management.Automation.AllowEmptyStringAttribute]::new()
+        $allowEmptyStringAttribute = New-Object System.Management.Automation.AllowEmptyStringAttribute
         $attributeCollection.Add($allowEmptyStringAttribute)
     }
     if ($PSBoundParameters.ContainsKey('AllowNull')) {
-        $allowNullAttribute = [System.Management.Automation.AllowNullAttribute]::new()
+        $allowNullAttribute = New-Object System.Management.Automation.AllowNullAttribute
         $attributeCollection.Add($allowNullAttribute)
     }
     if ($PSBoundParameters.ContainsKey('AllowEmptyCollection')) {
-        $allowEmptyCollectionAttribute = [System.Management.Automation.AllowEmptyCollectionAttribute]::new()
+        $allowEmptyCollectionAttribute = New-Object System.Management.Automation.AllowEmptyCollectionAttribute
         $attributeCollection.Add($allowEmptyCollectionAttribute)
     }
 
-    $runtimeDefinedParameter = [System.Management.Automation.RuntimeDefinedParameter]::new($Name, $Type, $attributeCollection)
+    $runtimeDefinedParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($Name, $Type, $attributeCollection)
 
     switch ($PSCmdlet.ParameterSetName) {
         'Add to dictionary' {
