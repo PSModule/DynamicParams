@@ -56,9 +56,94 @@ function Get-Info {
     }
 
     ...
+    process {
+        $process = $PSBoundParameters['Process']
+        $service = $PSBoundParameters['Service']
+        ...
+    }
+    ...
 }
 
 ```
+
+### Use dynamic parameters in a function - DSL Style
+
+Here is an example of how to use dynamic parameters in a function.
+
+```powershell
+#Requires -Modules DynamicParams
+
+function Get-Info {
+    [CmdletBinding()]
+    param ()
+
+    dynamicparam {
+        DynamicParamDictionary @(
+            @{
+                Name                   = 'Process'
+                Alias                  = 'proc'
+                Type                   = [string]
+                ValidateSet            = Get-Process | Select-Object -ExpandProperty Name -Unique
+            }
+            @{
+                Name                   = 'Service'
+                Alias                  = 'svc'
+                Type                   = [string]
+                ValidateSet            = Get-Service | Select-Object -ExpandProperty Name -Unique
+            }
+        )
+    }
+
+    ...
+    process {
+        $process = $PSBoundParameters['Process']
+        $service = $PSBoundParameters['Service']
+        ...
+    }
+    ...
+}
+
+```
+
+### Use dynamic parameters in a function - Pipeline style
+
+Here is an example of how to use dynamic parameters in a function.
+
+```powershell
+#Requires -Modules DynamicParams
+
+function Get-Info {
+    [CmdletBinding()]
+    param ()
+
+    dynamicparam {
+        $params = @(
+            @{
+                Name        = 'Variable'
+                Type        = [string]
+                ValidateSet = Get-Variable | Select-Object -ExpandProperty Name
+            },
+            @{
+                Name        = 'EnvironmentVariable'
+                Type        = [string]
+                ValidateSet = Get-ChildItem -Path env: | Select-Object -ExpandProperty Name
+            }
+        )
+
+        $params | ForEach-Object { New-DynamicParam @_ } | New-DynamicParamDictionary
+    }
+
+    ...
+    process {
+        $process = $PSBoundParameters['Process']
+        $service = $PSBoundParameters['Service']
+        ...
+    }
+    ...
+}
+
+```
+
 
 ## Contributing
 
