@@ -78,7 +78,7 @@ function Get-Info {
     param ()
 
     dynamicparam {
-        DynamicParamDictionary @(
+        DynamicParams @(
             @{
                 Name                   = 'Process'
                 Alias                  = 'proc'
