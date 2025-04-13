@@ -23,7 +23,7 @@
     [CmdletBinding()]
     param(
         # An array of hashtables or RuntimeDefinedParameter objects to add to the dictionary.
-        [Parameter()]
+        [Parameter(Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [object[]] $ParameterDefinition
     )
