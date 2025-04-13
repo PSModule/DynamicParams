@@ -101,7 +101,7 @@
                 )
 
                 dynamicparam {
-                    DynamicParams (
+                    DynamicParams @(
                         @{
                             Name        = 'Variable'
                             Type        = [string]
