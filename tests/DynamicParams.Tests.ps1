@@ -68,7 +68,7 @@
                     }
                     New-DynamicParam @dynEnvironmentVariable
 
-                    return $DynamicParamDictionary
+                    $DynamicParamDictionary
                 }
 
                 process {
