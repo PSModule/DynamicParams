@@ -28,10 +28,17 @@
             return $DynamicParamDictionary
         }
 
+        .OUTPUTS
+        [void]
+
+        .OUTPUTS
+        [System.Management.Automation.RuntimeDefinedParameterDictionary]
+
         .LINK
         https://psmodule.io/DynamicParams/Functions/New-DynamicParam/
     #>
-    [OutputType([void])]
+    [OutputType(ParameterSetName = 'Add to dictionary', [void])]
+    [OutputType(ParameterSetName = 'Return parameter', [System.Management.Automation.RuntimeDefinedParameter])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '', Justification = 'Long links'
     )]
@@ -39,7 +46,7 @@
         'PSUseShouldProcessForStateChangingFunctions', '',
         Justification = 'Function does not change state.'
     )]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Return parameter')]
     param(
         # Specifies the name of the parameter.
         [Parameter(Mandatory)]
@@ -153,7 +160,7 @@
         [switch] $AllowEmptyCollection,
 
         # Specifies the dynamic parameter dictionary.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Add to dictionary')]
         [System.Management.Automation.RuntimeDefinedParameterDictionary] $DynamicParamDictionary
     )
 
@@ -165,7 +172,7 @@
         }
     }
 
-    $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
+    $attributeCollection = [System.Collections.ObjectModel.Collection[System.Attribute]]::new()
 
     # foreach ParameterSet in ParameterSets , Key = name, Value = Hashtable
     $parameterAttribute = [System.Management.Automation.ParameterAttribute]::new()
@@ -185,7 +192,7 @@
 
     if ($PSBoundParameters.ContainsKey('Alias')) {
         $Alias | ForEach-Object {
-            $aliasAttribute = New-Object System.Management.Automation.AliasAttribute($_)
+            $aliasAttribute = [System.Management.Automation.AliasAttribute]::new($_)
             $attributeCollection.Add($aliasAttribute)
         }
     }
@@ -193,33 +200,33 @@
     # TODO: Add ability to add a param doc/comment
 
     if ($PSBoundParameters.ContainsKey('ValidateSet')) {
-        $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSet)
+        $validateSetAttribute = [System.Management.Automation.ValidateSetAttribute]::new($ValidateSet)
         if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
             $validateSetAttribute.ErrorMessage = $ValidationErrorMessage
         }
         $attributeCollection.Add($validateSetAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateNotNullOrEmpty')) {
-        $validateSetAttribute = New-Object System.Management.Automation.ValidateNotNullOrEmptyAttribute
-        $attributeCollection.Add($validateSetAttribute)
+        $validateNotNullOrEmptyAttribute = [System.Management.Automation.ValidateNotNullOrEmptyAttribute]::new()
+        $attributeCollection.Add($validateNotNullOrEmptyAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateLength')) {
-        $validateLengthAttribute = New-Object System.Management.Automation.ValidateLengthAttribute($ValidateLength[0], $ValidateLength[1])
+        $validateLengthAttribute = [System.Management.Automation.ValidateLengthAttribute]::new($ValidateLength[0], $ValidateLength[1])
         $attributeCollection.Add($validateLengthAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateCount')) {
-        $validateCountAttribute = New-Object System.Management.Automation.ValidateCountAttribute($ValidateCount[0], $ValidateCount[1])
+        $validateCountAttribute = [System.Management.Automation.ValidateCountAttribute]::new($ValidateCount[0], $ValidateCount[1])
         $attributeCollection.Add($validateCountAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateScript')) {
-        $validateScriptAttribute = New-Object System.Management.Automation.ValidateScriptAttribute($ValidateScript)
+        $validateScriptAttribute = [System.Management.Automation.ValidateScriptAttribute]::new($ValidateScript)
         if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
             $validateScriptAttribute.ErrorMessage = $ValidationErrorMessage
         }
         $attributeCollection.Add($validateScriptAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidatePattern')) {
-        $validatePatternAttribute = New-Object System.Management.Automation.ValidatePatternAttribute($ValidatePattern)
+        $validatePatternAttribute = [System.Management.Automation.ValidatePatternAttribute]::new($ValidatePattern)
         if ($PSBoundParameters.ContainsKey('ValidationErrorMessage') -and -not $isDesktop) {
             $validatePatternAttribute.ErrorMessage = $ValidationErrorMessage
         }
@@ -229,27 +236,34 @@
         $attributeCollection.Add($validatePatternAttribute)
     }
     if ($PSBoundParameters.ContainsKey('ValidateRange')) {
-        $validateRangeAttribute = New-Object System.Management.Automation.ValidateRangeAttribute($ValidateRange)
+        $validateRangeAttribute = [System.Management.Automation.ValidateRangeAttribute]::new($ValidateRange)
         $attributeCollection.Add($validateRangeAttribute)
     }
     if ($PSBoundParameters.ContainsKey('SupportsWildcards')) {
-        $supportsWildcardsAttribute = New-Object System.Management.Automation.SupportsWildcardsAttribute
+        $supportsWildcardsAttribute = [System.Management.Automation.SupportsWildcardsAttribute]::new()
         $attributeCollection.Add($supportsWildcardsAttribute)
     }
     if ($PSBoundParameters.ContainsKey('AllowEmptyString')) {
-        $allowEmptyStringAttribute = New-Object System.Management.Automation.AllowEmptyStringAttribute
+        $allowEmptyStringAttribute = [System.Management.Automation.AllowEmptyStringAttribute]::new()
         $attributeCollection.Add($allowEmptyStringAttribute)
     }
     if ($PSBoundParameters.ContainsKey('AllowNull')) {
-        $allowNullAttribute = New-Object System.Management.Automation.AllowNullAttribute
+        $allowNullAttribute = [System.Management.Automation.AllowNullAttribute]::new()
         $attributeCollection.Add($allowNullAttribute)
     }
     if ($PSBoundParameters.ContainsKey('AllowEmptyCollection')) {
-        $allowEmptyCollectionAttribute = New-Object System.Management.Automation.AllowEmptyCollectionAttribute
+        $allowEmptyCollectionAttribute = [System.Management.Automation.AllowEmptyCollectionAttribute]::new()
         $attributeCollection.Add($allowEmptyCollectionAttribute)
     }
 
-    $runtimeDefinedParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($Name, $Type, $attributeCollection)
-    $DynamicParamDictionary.Add($Name, $runtimeDefinedParameter)
+    $runtimeDefinedParameter = [System.Management.Automation.RuntimeDefinedParameter]::new($Name, $Type, $attributeCollection)
 
+    switch ($PSCmdlet.ParameterSetName) {
+        'Add to dictionary' {
+            $DynamicParamDictionary.Add($Name, $runtimeDefinedParameter)
+        }
+        'Return parameter' {
+            return $runtimeDefinedParameter
+        }
+    }
 }

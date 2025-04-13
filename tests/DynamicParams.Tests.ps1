@@ -85,4 +85,94 @@
             { Test-DynParam -Variable HOME -EnvironmentVariable RUNNER_OS -Verbose } | Should -Not -Throw
         }
     }
+
+    Context 'Integration - DSL' {
+        BeforeAll {
+            filter Test-DynParam {
+                <#
+                    .SYNOPSIS
+                    This is a test of dynamic parameters.
+                #>
+                [CmdletBinding()]
+                param (
+                    [Parameter()]
+                    [ValidateSet('A', 'B', 'C')]
+                    [string]$Param1
+                )
+
+                dynamicparam {
+                    DynamicParams (
+                        @{
+                            Name        = 'Variable'
+                            Type        = [string]
+                            ValidateSet = Get-Variable | Select-Object -ExpandProperty Name
+                        },
+                        @{
+                            Name        = 'EnvironmentVariable'
+                            Type        = [string]
+                            ValidateSet = Get-ChildItem -Path env: | Select-Object -ExpandProperty Name
+                        }
+                    )
+                }
+
+                process {
+                    $Variable = $PSBoundParameters['Variable']
+                    $EnvironmentVariable = $PSBoundParameters['EnvironmentVariable']
+
+                    Write-Verbose "Variable:            $Variable"
+                    Write-Verbose "EnvironmentVariable: $EnvironmentVariable"
+                }
+            }
+        }
+
+        It 'Test-DynParam should not throw an exception' {
+            { Test-DynParam -Variable HOME -EnvironmentVariable RUNNER_OS -Verbose } | Should -Not -Throw
+        }
+    }
+
+    Context 'Integration - Pipelined construction' {
+        BeforeAll {
+            filter Test-DynParam {
+                <#
+                    .SYNOPSIS
+                    This is a test of dynamic parameters.
+                #>
+                [CmdletBinding()]
+                param (
+                    [Parameter()]
+                    [ValidateSet('A', 'B', 'C')]
+                    [string]$Param1
+                )
+
+                dynamicparam {
+                    $params = @(
+                        @{
+                            Name        = 'Variable'
+                            Type        = [string]
+                            ValidateSet = Get-Variable | Select-Object -ExpandProperty Name
+                        },
+                        @{
+                            Name        = 'EnvironmentVariable'
+                            Type        = [string]
+                            ValidateSet = Get-ChildItem -Path env: | Select-Object -ExpandProperty Name
+                        }
+                    )
+
+                    $params | ForEach-Object { New-DynamicParam @_ } | New-DynamicParamDictionary
+                }
+
+                process {
+                    $Variable = $PSBoundParameters['Variable']
+                    $EnvironmentVariable = $PSBoundParameters['EnvironmentVariable']
+
+                    Write-Verbose "Variable:            $Variable"
+                    Write-Verbose "EnvironmentVariable: $EnvironmentVariable"
+                }
+            }
+        }
+
+        It 'Test-DynParam should not throw an exception' {
+            { Test-DynParam -Variable HOME -EnvironmentVariable RUNNER_OS -Verbose } | Should -Not -Throw
+        }
+    }
 }
