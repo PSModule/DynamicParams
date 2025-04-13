@@ -222,7 +222,7 @@
         }
     }
 
-    Context 'Integration - Pipelined construction - more pipeline' {
+    Context 'Integration - Pipelined construction - shorter pipeline' {
         BeforeAll {
             filter Test-DynParam {
                 <#

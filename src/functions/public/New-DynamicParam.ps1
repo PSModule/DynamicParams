@@ -165,7 +165,7 @@
         [System.Management.Automation.RuntimeDefinedParameterDictionary] $DynamicParamDictionary,
 
         # Allows accepting an object or array of objects from the pipeline.
-        [Parameter(ParameterSetName = 'Add to dictionary as array', ValueFromPipeline)]
+        [Parameter(ParameterSetName = 'Process array', ValueFromPipeline)]
         [object[]] $InputObject
     )
     begin {
@@ -174,12 +174,9 @@
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
-            'Add to dictionary as array' {
+            'Process array' {
                 foreach ($item in $InputObject) {
-                    if ($item -is [hashtable]) {
-                        $item = New-DynamicParam @item
-                    }
-                    $DynamicParamDictionary.Add($item.Name, $item)
+                    $item | New-DynamicParam
                 }
             }
             default {
@@ -287,6 +284,5 @@
         }
     }
 
-    end {
-    }
+    end {}
 }
