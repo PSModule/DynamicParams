@@ -12,7 +12,7 @@
             $dynParam = @{
                 Name                   = 'GitignoreTemplate'
                 Alias                  = 'gitignore_template'
-                Type                   = New-Object string]
+                Type                   = [string]
                 ValidateSet            = Get-GitHubGitignoreList
                 DynamicParamDictionary = $DynamicParamDictionary
             }
@@ -20,7 +20,7 @@
             $dynParam2 = @{
                 Name                   = 'LicenseTemplate'
                 Alias                  = 'license_template'
-                Type                   = New-Object string]
+                Type                   = [string]
                 ValidateSet            = Get-GitHubLicenseList | Select-Object -ExpandProperty key
                 DynamicParamDictionary = $DynamicParamDictionary
             }
