@@ -87,12 +87,12 @@
         # An array of hashtables or RuntimeDefinedParameter objects to add to the dictionary.
         [Parameter(ValueFromPipeline, ParameterSetName = 'Input as RuntimeParam')]
         [ValidateNotNull()]
-        [System.Management.Automation.RuntimeDefinedParameter[]] $RuntimeParameters,
+        [System.Management.Automation.RuntimeDefinedParameter] $RuntimeParameters,
 
         # An hashtables or RuntimeDefinedParameter objects to add to the dictionary.
         [Parameter(ValueFromPipeline, ParameterSetName = 'Input as Hashtable')]
         [ValidateNotNull()]
-        [hashtable[]] $Hashtable
+        [hashtable] $Hashtable
     )
 
     begin {
