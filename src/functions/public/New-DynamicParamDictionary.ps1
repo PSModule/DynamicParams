@@ -85,14 +85,14 @@
     [CmdletBinding(DefaultParameterSetName = 'Create parameter dictionary')]
     param(
         # An array of hashtables or RuntimeDefinedParameter objects to add to the dictionary.
-        [Parameter(ValueFromPipeline, ParameterSetName = 'Input as RuntimeParam')]
+        [Parameter(Position = 0, ValueFromPipeline, ParameterSetName = 'Input as RuntimeParam')]
         [ValidateNotNull()]
         [System.Management.Automation.RuntimeDefinedParameter] $RuntimeParameters,
 
         # An hashtables or RuntimeDefinedParameter objects to add to the dictionary.
-        [Parameter(ValueFromPipeline, ParameterSetName = 'Input as Hashtable')]
+        [Parameter(Position = 0, ValueFromPipeline, ParameterSetName = 'Input as Hashtable')]
         [ValidateNotNull()]
-        [hashtable] $Hashtable
+        [System.Collections.IDictionary] $Hashtable
     )
 
     begin {
