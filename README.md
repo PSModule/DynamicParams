@@ -1,165 +1,27 @@
 # DynamicParams
 
-A PowerShell module that makes it easier to use dynamic params.
-
-## Prerequisites
-
-No prerequisites are required to use this module.
+DynamicParams is a PowerShell module that makes it easier to build dynamic parameters.
 
 ## Installation
 
-Provide step-by-step instructions on how to install the module, including any InstallModule commands or manual installation steps.
+Install the module from the PowerShell Gallery:
 
 ```powershell
-Install-Module -Name DynamicParams
+Install-PSResource -Name DynamicParams
 Import-Module -Name DynamicParams
 ```
 
-## Usage
+## Documentation
 
-Here is a list of example that are typical use cases for the module.
-This section should provide a good overview of the module's capabilities.
+Documentation is published at [psmodule.io/DynamicParams](https://psmodule.io/DynamicParams/).
 
-### Use dynamic parameters in a function
-
-Here is an example of how to use dynamic parameters in a function.
+Use PowerShell help and command discovery for module details:
 
 ```powershell
-#Requires -Modules DynamicParams
-
-function Get-Info {
-    [CmdletBinding()]
-    param ()
-
-    dynamicparam {
-        $DynamicParamDictionary = New-DynamicParamDictionary
-
-        $dynParam = @{
-            Name                   = 'Process'
-            Alias                  = 'proc'
-            Type                   = [string]
-            ValidateSet            = Get-Process | Select-Object -ExpandProperty Name -Unique
-            DynamicParamDictionary = $DynamicParamDictionary
-        }
-        New-DynamicParam @dynParam
-
-        $dynParam2 = @{
-            Name                   = 'Service'
-            Alias                  = 'svc'
-            Type                   = [string]
-            ValidateSet            = Get-Service | Select-Object -ExpandProperty Name -Unique
-            DynamicParamDictionary = $DynamicParamDictionary
-        }
-        New-DynamicParam @dynParam2
-
-        return $DynamicParamDictionary
-    }
-
-    ...
-    process {
-        $process = $PSBoundParameters['Process']
-        $service = $PSBoundParameters['Service']
-        ...
-    }
-    ...
-}
-
+Get-Command -Module DynamicParams
+Get-Help <CommandName> -Examples
 ```
-
-### Use dynamic parameters in a function - DSL Style
-
-Here is an example of how to use dynamic parameters in a function.
-
-```powershell
-#Requires -Modules DynamicParams
-
-function Get-Info {
-    [CmdletBinding()]
-    param ()
-
-    dynamicparam {
-        DynamicParams @(
-            @{
-                Name                   = 'Process'
-                Alias                  = 'proc'
-                Type                   = [string]
-                ValidateSet            = Get-Process | Select-Object -ExpandProperty Name -Unique
-            }
-            @{
-                Name                   = 'Service'
-                Alias                  = 'svc'
-                Type                   = [string]
-                ValidateSet            = Get-Service | Select-Object -ExpandProperty Name -Unique
-            }
-        )
-    }
-
-    ...
-    process {
-        $process = $PSBoundParameters['Process']
-        $service = $PSBoundParameters['Service']
-        ...
-    }
-    ...
-}
-
-```
-
-### Use dynamic parameters in a function - Pipeline style
-
-Here is an example of how to use dynamic parameters in a function.
-
-```powershell
-#Requires -Modules DynamicParams
-
-function Get-Info {
-    [CmdletBinding()]
-    param ()
-
-    dynamicparam {
-        $params = @(
-            @{
-                Name        = 'Variable'
-                Type        = [string]
-                ValidateSet = Get-Variable | Select-Object -ExpandProperty Name
-            },
-            @{
-                Name        = 'EnvironmentVariable'
-                Type        = [string]
-                ValidateSet = Get-ChildItem -Path env: | Select-Object -ExpandProperty Name
-            }
-        )
-
-        $params | ForEach-Object { New-DynamicParam @_ } | New-DynamicParamDictionary
-    }
-
-    ...
-    process {
-        $process = $PSBoundParameters['Process']
-        $service = $PSBoundParameters['Service']
-        ...
-    }
-    ...
-}
-
-```
-
 
 ## Contributing
 
-Coder or not, you can contribute to the project! We welcome all contributions.
-
-### For Users
-
-If you don't code, you still sit on valuable information that can make this project even better. If you experience that the
-product does unexpected things, throw errors or is missing functionality, you can help by submitting bugs and feature requests.
-Please see the issues tab on this project and submit a new issue that matches your needs.
-
-### For Developers
-
-If you do code, we'd love to have your contributions. Please read the [Contribution guidelines](CONTRIBUTING.md) for more information.
-You can either help by picking up an existing issue or submit a new one if you have an idea for a new feature or improvement.
-
-## Links
-
-- [about_Functions_Advanced_Parameters | Microsoft Learn](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced_parameters?view=powershell-7.4#dynamic-parameters)
+Issues and pull requests are welcome. Please use the repository issue tracker to report bugs, request features, or discuss improvements.
