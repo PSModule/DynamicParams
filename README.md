@@ -8,6 +8,7 @@ Install the module from the PowerShell Gallery:
 
 ```powershell
 Install-Module -Name DynamicParams
+Import-Module -Name DynamicParams
 ```
 
 Or with PSResourceGet:
@@ -25,7 +26,7 @@ Use PowerShell help and command discovery for module details:
 
 ```powershell
 Get-Command -Module DynamicParams
-Get-Help <CommandName> -Examples
+Get-Help New-DynamicParam -Examples
 ```
 
 ## Contributing
