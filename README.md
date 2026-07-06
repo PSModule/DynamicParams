@@ -7,6 +7,12 @@ DynamicParams is a PowerShell module that makes it easier to build dynamic param
 Install the module from the PowerShell Gallery:
 
 ```powershell
+Install-Module -Name DynamicParams
+```
+
+Or with PSResourceGet:
+
+```powershell
 Install-PSResource -Name DynamicParams
 Import-Module -Name DynamicParams
 ```
