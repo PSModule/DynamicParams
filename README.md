@@ -58,6 +58,8 @@ function Get-Info {
 
 ### Example: Define parameters with the DSL style
 
+`DynamicParams` is a convenience DSL alias that wraps `New-DynamicParam` and `New-DynamicParamDictionary`:
+
 ```powershell
 function Get-Info {
     [CmdletBinding()]
