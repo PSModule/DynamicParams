@@ -1,4 +1,6 @@
-﻿Describe 'DynamicParams' {
+﻿#Requires -Modules @{ ModuleName = 'Pester'; ModuleVersion = '6.0.0'; MaximumVersion = '6.*' }
+
+Describe 'DynamicParams' {
     Context 'Function: New-DynamicParamDictionary' {
         It 'New-DynamicParamDictionary should not throw an exception' {
             { New-DynamicParamDictionary } | Should -Not -Throw
